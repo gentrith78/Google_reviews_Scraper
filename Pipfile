@@ -8,6 +8,8 @@ requests = "*"
 playwright = "*"
 pandas = "*"
 python-dotenv = "*"
+bs4 = "*"
+lxml = "*"
 
 [dev-packages]
 

@@ -13,7 +13,7 @@ import math
 import socket
 import random
 
-from gologin_api.extensionsManager import ExtensionsManager
+from scraper.gologin_api.extensionsManager import ExtensionsManager
 
 API_URL = 'https://api.gologin.com'
 
