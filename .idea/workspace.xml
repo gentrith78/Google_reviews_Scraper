@@ -5,24 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b1bceb06-eeeb-45ff-9d59-ee59dd4f9b07" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/scraper/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/scraper/gologin_api/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/scraper/pl_automator.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/xpath_extracter/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/xpath_extracter/get_search_htmlElements.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/xpath_extracter/get_search_pages.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/xpath_extracter/helper.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/xpath_extracter/list_place_extractor.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/xpath_extracter/review_analyser.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/xpath_extracter/reviews.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/xpath_extracter/sample.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/xpath_extracter/xpath_finder.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Pipfile" beforeDir="false" afterPath="$PROJECT_DIR$/Pipfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Pipfile.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Pipfile.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/reader/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/list_div_extractor.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/reader/gologin_api/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/scraper/gologin_api/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/reader/gologin_api/extensionsManager.py" beforeDir="false" afterPath="$PROJECT_DIR$/scraper/gologin_api/extensionsManager.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/reader/gologin_api/gologin.py" beforeDir="false" afterPath="$PROJECT_DIR$/scraper/gologin_api/gologin.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -48,13 +32,13 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "last_opened_file_path": "C:/Users/Gigi/Desktop/ads_scraper/scraper_backup.py"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Gigi/Desktop/ads_scraper/scraper_backup.py&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\Gigi\Desktop\Google_reviews_Scraper\xpath_extracter" />
