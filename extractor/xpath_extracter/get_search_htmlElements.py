@@ -1,3 +1,5 @@
+import time
+
 from bs4 import BeautifulSoup
 
 try:
@@ -12,7 +14,10 @@ attrhelpers = AttrHelpers
 def get_search_html_elements(html_data):
     soup = BeautifulSoup(html_data,features='html.parser')
 
-    search_area_xpath = xpath_soup(soup.find('textarea',AttrHelpers.search_field_attr))
+    try:
+        search_area_xpath = xpath_soup(soup.find('textarea',AttrHelpers.search_field_attr))
+    except:
+        time.sleep(1000)
 
     return search_area_xpath
 

@@ -11,25 +11,24 @@ class AttrHelpers(): #so we are gonna use this data to find the elements through
     list_div_attr = {'class':'rlfl__tls rl_tls'} #class="rlfl__tls rl_tls"
     place_div_attr = {'jscontroller':'AtSb'}
     name_div_of_place = {'class':'rllt__details'}
-    reviews = {'class':'KYeOtb','data-index':'2'}
-    id_place_frame:dict = ''
     review_button = {'jsname':'AznF2e','data-index':'2'}
     lowest_review_button = {'data-sort-id':'ratingLow'}
     review_div_attrs = {'jscontroller':'I1e3hc','jsaction':'rcuQ6b:npT2md'} #this only contains a list of  divs where on each div exist the review data.
                                                                             #for each scroll a new similar div is created and it contains 10 new reviews
+    def get_reviews_button_second_method(self):
+        self.review_button['data-index'] = "1"
+        return self.review_button
 
 
-
-    def get_id(self,primary_id):
-        self.id_place_frame = {'id':f'akp_{primary_id}'}
-        return self.id_place_frame
 
 
 @dataclass
 class Place():
-    name:str
-    respnse:str
-    contacts:str
+    Name:str
+    Page:str
+    Contacts:str
+    Potential_Response:str
+    Url:str
 
 @dataclass
 class Places():

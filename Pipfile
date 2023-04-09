@@ -10,6 +10,7 @@ pandas = "*"
 python-dotenv = "*"
 bs4 = "*"
 lxml = "*"
+spacy = "*"
 
 [dev-packages]
 

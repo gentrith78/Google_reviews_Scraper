@@ -1,3 +1,6 @@
+import time
+from tkinter import messagebox
+
 from bs4 import BeautifulSoup
 
 try:
@@ -22,8 +25,12 @@ def get_reviews_button_xpath(html_data):
     place_frame = soup.find('async-local-kp')
 
     # find the review button
-    reviews_button_xpath = xpath_soup(place_frame.find('a', attr_helpers.review_button))
-
+    try:
+        reviews_button_xpath = xpath_soup(place_frame.find('a', attr_helpers.review_button))
+    except:
+        # sometimes the review button has data-index='1' instead of data-index='2'
+        reviews_button_xpath = xpath_soup(place_frame.find('a', attr_helpers.get_reviews_button_second_method()))
+        pass
     return reviews_button_xpath
 
 def get_lowest_reviews_xpath(html_data):
@@ -33,9 +40,12 @@ def get_lowest_reviews_xpath(html_data):
     place_frame = soup.find('async-local-kp')
 
     # get lowest reviews button xpath
-    lowest_reviews_button_xpath = xpath_soup(place_frame.find('div',attr_helpers.lowest_review_button))
-
-    return lowest_reviews_button_xpath
+    try:
+        lowest_reviews_button_xpath = xpath_soup(place_frame.find('div',attr_helpers.lowest_review_button))
+        return lowest_reviews_button_xpath
+    except:
+        #means that no reviews or little number of reviews was founded
+        pass
 
 def get_all_reviews(html_data):
     """
