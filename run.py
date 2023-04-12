@@ -1,4 +1,5 @@
 import os
+import time
 
 from extractor import get_reviews
 from first_start import check_firstStart
@@ -20,6 +21,12 @@ def get_keywords():
             else:
                 keywrods.append(keyword_)
         return keywrods
+
 if __name__ == '__main__':
         for keyword_ in get_keywords():
             get_reviews(keyword_)
+
+
+#TODO change first_start.txt
+#TODO enable headless mode
+#TODO

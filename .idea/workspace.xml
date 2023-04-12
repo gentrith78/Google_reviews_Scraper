@@ -4,32 +4,24 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b1bceb06-eeeb-45ff-9d59-ee59dd4f9b07" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/extractor/scraper/gologin_api/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/first_start/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/first_start/is_first_start.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/first_start/requirements.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/run.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/setup.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+    <list default="true" id="b1bceb06-eeeb-45ff-9d59-ee59dd4f9b07" name="Changes" comment="First Version (Not Tested in full scale)">
+      <change afterPath="$PROJECT_DIR$/extractor/logger_m/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/extractor/logger_m/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/extractor/scraper/pl_automator_2.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/extractor/xpath_extracter/sample.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Pipfile" beforeDir="false" afterPath="$PROJECT_DIR$/Pipfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Pipfile.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Pipfile.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/list_div_extractor.py" beforeDir="false" afterPath="$PROJECT_DIR$/extractor/list_div_extractor.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scraper/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/extractor/scraper/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scraper/gologin_api/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/extractor/scraper/gologin_api/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scraper/gologin_api/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/extractor/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scraper/gologin_api/extensionsManager.py" beforeDir="false" afterPath="$PROJECT_DIR$/extractor/scraper/gologin_api/extensionsManager.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scraper/gologin_api/gologin.py" beforeDir="false" afterPath="$PROJECT_DIR$/extractor/scraper/gologin_api/gologin.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scraper/pl_automator.py" beforeDir="false" afterPath="$PROJECT_DIR$/extractor/scraper/pl_automator.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/xpath_extracter/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/extractor/xpath_extracter/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/xpath_extracter/get_search_htmlElements.py" beforeDir="false" afterPath="$PROJECT_DIR$/extractor/xpath_extracter/get_search_htmlElements.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/xpath_extracter/get_search_pages.py" beforeDir="false" afterPath="$PROJECT_DIR$/extractor/xpath_extracter/get_search_pages.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/xpath_extracter/helper.py" beforeDir="false" afterPath="$PROJECT_DIR$/extractor/xpath_extracter/helper.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/xpath_extracter/list_place_extractor.py" beforeDir="false" afterPath="$PROJECT_DIR$/extractor/xpath_extracter/list_place_extractor.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/xpath_extracter/review_analyser.py" beforeDir="false" afterPath="$PROJECT_DIR$/extractor/xpath_extracter/review_analyser.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/xpath_extracter/reviews.py" beforeDir="false" afterPath="$PROJECT_DIR$/extractor/xpath_extracter/reviews.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/xpath_extracter/xpath_finder.py" beforeDir="false" afterPath="$PROJECT_DIR$/extractor/xpath_extracter/xpath_finder.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/extractor/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/extractor/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/extractor/scraper/gologin_api/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/extractor/scraper/gologin_api/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/extractor/scraper/automator_snippets.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/extractor/scraper/gologin_api/extensionsManager.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/extractor/scraper/gologin_api/gologin.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/extractor/scraper/pl_automator.py" beforeDir="false" afterPath="$PROJECT_DIR$/extractor/scraper/pl_automator.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/extractor/xpath_extracter/get_search_htmlElements.py" beforeDir="false" afterPath="$PROJECT_DIR$/extractor/xpath_extracter/get_search_htmlElements.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/extractor/xpath_extracter/helper.py" beforeDir="false" afterPath="$PROJECT_DIR$/extractor/xpath_extracter/helper.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/extractor/xpath_extracter/review_analyser.py" beforeDir="false" afterPath="$PROJECT_DIR$/extractor/xpath_extracter/review_analyser.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/extractor/xpath_extracter/reviews.py" beforeDir="false" afterPath="$PROJECT_DIR$/extractor/xpath_extracter/reviews.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/first_start/is_first_start.txt" beforeDir="false" afterPath="$PROJECT_DIR$/first_start/is_first_start.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/run.py" beforeDir="false" afterPath="$PROJECT_DIR$/run.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -59,19 +51,19 @@
   &quot;keyToString&quot;: {
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/Gigi/Desktop/ads_scraper/scraper_backup.py&quot;
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Gigi/Desktop/hds_python_logic/templates/camel24.py&quot;
   }
 }</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\Gigi\Desktop\Google_reviews_Scraper\first_start" />
       <recent name="C:\Users\Gigi\Desktop\Google_reviews_Scraper\extractor" />
+      <recent name="C:\Users\Gigi\Desktop\Google_reviews_Scraper\first_start" />
       <recent name="C:\Users\Gigi\Desktop\Google_reviews_Scraper\xpath_extracter" />
       <recent name="C:\Users\Gigi\Desktop\Google_reviews_Scraper\scraper" />
       <recent name="C:\Users\Gigi\Desktop\Google_reviews_Scraper\reader" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.__init__">
+  <component name="RunManager" selected="Python.run">
     <configuration name="__init__" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="Google_reviews_Scraper" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -114,7 +106,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="pl_automator" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="pl_automator_2" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="Google_reviews_Scraper" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -122,11 +114,11 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/scraper" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/extractor/scraper" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/scraper/pl_automator.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/extractor/scraper/pl_automator_2.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -135,7 +127,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="review_analyser" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="reviews" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="Google_reviews_Scraper" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -147,7 +139,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/extractor/xpath_extracter/review_analyser.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/extractor/xpath_extracter/reviews.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -179,11 +171,11 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.__init__" />
         <item itemvalue="Python.run" />
-        <item itemvalue="Python.review_analyser" />
+        <item itemvalue="Python.pl_automator_2" />
+        <item itemvalue="Python.reviews" />
         <item itemvalue="Python.pl_automator (1)" />
-        <item itemvalue="Python.pl_automator" />
+        <item itemvalue="Python.__init__" />
       </list>
     </recent_temporary>
   </component>
@@ -196,6 +188,14 @@
       <option name="presentableId" value="Default" />
       <updated>1680653979881</updated>
     </task>
+    <task id="LOCAL-00001" summary="First Version (Not Tested in full scale)">
+      <created>1681004873869</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1681004873869</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -208,5 +208,20 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="First Version (Not Tested in full scale)" />
+    <option name="LAST_COMMIT_MESSAGE" value="First Version (Not Tested in full scale)" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <default-breakpoints>
+        <breakpoint type="python-exception">
+          <properties notifyOnTerminate="true" exception="BaseException">
+            <option name="notifyOnTerminate" value="true" />
+          </properties>
+        </breakpoint>
+      </default-breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

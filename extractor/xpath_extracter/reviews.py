@@ -25,12 +25,12 @@ def get_reviews_button_xpath(html_data):
     place_frame = soup.find('async-local-kp')
 
     # find the review button
-    try:
-        reviews_button_xpath = xpath_soup(place_frame.find('a', attr_helpers.review_button))
-    except:
-        # sometimes the review button has data-index='1' instead of data-index='2'
-        reviews_button_xpath = xpath_soup(place_frame.find('a', attr_helpers.get_reviews_button_second_method()))
-        pass
+    reviews_button_xpath = xpath_soup(place_frame.find('a', attr_helpers.review_button))
+    parent_div = place_frame.find('a', attr_helpers.review_button).parent
+    for el in parent_div:
+        if 'reviews' in str(el.text).lower():
+            reviews_button_xpath = xpath_soup(el)
+
     return reviews_button_xpath
 
 def get_lowest_reviews_xpath(html_data):
@@ -69,7 +69,7 @@ def get_all_reviews(html_data):
     for review_pack in review_packs:
         for review_div in review_pack:
             if review_div.find('strong') != None and review_div.find('strong').text == 'Response from the owner':
-                pass
+                #TODO add feature to click 'more'
                 # get the owner reply text
                 parent_div = review_div.find('strong').parent.parent #this div conatins the label "'Response from the owner' and another div the actual review, so i select the second div to get the response data
                 actual_response_div = parent_div.find_all('div')[-1]
@@ -83,4 +83,4 @@ def get_all_reviews(html_data):
 if __name__ == '__main__':
     with open('sample.txt','r',encoding='utf8') as f:
         html_data = f.read()
-        print(get_all_reviews(html_data))
+        get_reviews_button_xpath(html_data)

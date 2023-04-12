@@ -20,21 +20,24 @@ def get_phones(text):
     return None
 def find_contact_info(text):
     # Define regular expressions for different types of contact info
-    email_re = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
-    phone_re = r'\b\d{3}[-.\s]??\d{3}[-.\s]??\d{4}\b'
-    website_re = r'\b(?:https?://)?(?:www\.)?[\w-]+\.[\w]{2,3}\b'
-    social_media_re = r'\b(?:https?://)?(?:www\.)?(facebook|twitter|instagram)\.com/\S+\b'
+    email_url_re_with_hhtps = r'https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)'
+    email_url_re_without_https = r'[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)'
+    us_phonenumbers_pattern = r'^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}$'
+    non_us_phonenumber_patterns = r'^(\+0?1\s)?\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}$'
+    non_standard_phonenumbers_pattern = r'^(\+\d{1,2}\s?)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$'
     # Compile regular expressions
-    email_regex = re.compile(email_re, re.IGNORECASE)
-    phone_regex = re.compile(phone_re, re.IGNORECASE)
-    website_regex = re.compile(website_re, re.IGNORECASE)
-    social_media_regex = re.compile(social_media_re, re.IGNORECASE)
+    email_regex = re.compile(email_url_re_with_hhtps, re.IGNORECASE)
+    email_regex2 = re.compile(email_url_re_without_https, re.IGNORECASE)
+    phone_regex1 = re.compile(us_phonenumbers_pattern, re.IGNORECASE)
+    phone_regex2 = re.compile(non_us_phonenumber_patterns, re.IGNORECASE)
+    phone_regex3 = re.compile(non_standard_phonenumbers_pattern, re.IGNORECASE)
     # Find all matches in the text
     matches = []
     matches.extend(email_regex.findall(text))
-    matches.extend(phone_regex.findall(text))
-    matches.extend(website_regex.findall(text))
-    matches.extend(social_media_regex.findall(text))
+    matches.extend(email_regex2.findall(text))
+    matches.extend(phone_regex1.findall(text))
+    matches.extend(phone_regex2.findall(text))
+    matches.extend(phone_regex3.findall(text))
     # Remove duplicates
     matches = list(set(matches))
     return matches

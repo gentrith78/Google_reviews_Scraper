@@ -9,7 +9,7 @@ except:
     from xpath_finder import xpath_soup
     from helper import AttrHelpers
 
-attrhelpers = AttrHelpers
+attrhelpers = AttrHelpers()
 
 def get_search_html_elements(html_data):
     soup = BeautifulSoup(html_data,features='html.parser')
@@ -17,7 +17,7 @@ def get_search_html_elements(html_data):
     try:
         search_area_xpath = xpath_soup(soup.find('textarea',AttrHelpers.search_field_attr))
     except:
-        time.sleep(1000)
+        search_area_xpath = xpath_soup(soup.find('input',attrhelpers.get_second_helper_SEARCHINPUT()))
 
     return search_area_xpath
 
