@@ -4,17 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b1bceb06-eeeb-45ff-9d59-ee59dd4f9b07" name="Changes" comment="First Version (Not Tested in full scale)">
-      <change afterPath="$PROJECT_DIR$/extractor/scraper/Proxy_list.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/extractor/scraper/automator_snippets.py" beforeDir="false" afterPath="$PROJECT_DIR$/extractor/scraper/automator_snippets.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/extractor/scraper/pl_automator_2.py" beforeDir="false" afterPath="$PROJECT_DIR$/extractor/scraper/pl_automator_2.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/extractor/xpath_extracter/helper.py" beforeDir="false" afterPath="$PROJECT_DIR$/extractor/xpath_extracter/helper.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/extractor/xpath_extracter/reviews.py" beforeDir="false" afterPath="$PROJECT_DIR$/extractor/xpath_extracter/reviews.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/extractor/xpath_extracter/sample.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/first_start/is_first_start.txt" beforeDir="false" afterPath="$PROJECT_DIR$/first_start/is_first_start.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/run.py" beforeDir="false" afterPath="$PROJECT_DIR$/run.py" afterDir="false" />
-    </list>
+    <list default="true" id="b1bceb06-eeeb-45ff-9d59-ee59dd4f9b07" name="Changes" comment="Edited gitignore to ignore __pycache__" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -187,7 +177,21 @@
       <option name="project" value="LOCAL" />
       <updated>1681004873869</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="First Tested Version">
+      <created>1681311890288</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1681311890288</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Edited gitignore to ignore __pycache__">
+      <created>1681312040138</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1681312040138</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -203,7 +207,9 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="First Version (Not Tested in full scale)" />
-    <option name="LAST_COMMIT_MESSAGE" value="First Version (Not Tested in full scale)" />
+    <MESSAGE value="First Tested Version" />
+    <MESSAGE value="Edited gitignore to ignore __pycache__" />
+    <option name="LAST_COMMIT_MESSAGE" value="Edited gitignore to ignore __pycache__" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
