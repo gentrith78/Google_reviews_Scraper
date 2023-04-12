@@ -32,3 +32,4 @@ class Logger:
 logger_obj = Logger(f'{PATH}/logs')
 
 logger_inst = logger_obj.get_logger()
+

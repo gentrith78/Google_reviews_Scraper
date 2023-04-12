@@ -3,8 +3,13 @@ import time
 import random
 
 
-from extractor.xpath_extracter import get_search_html_elements, get_more_places_button, get_pages_url,\
-    get_reviews_button_xpath, get_lowest_reviews_xpath, get_all_reviews, Place
+try:
+    from extractor.xpath_extracter import get_search_html_elements, get_more_places_button, get_pages_url,\
+        get_reviews_button_xpath, get_lowest_reviews_xpath, get_all_reviews, Place
+except:
+    from xpath_extracter import get_search_html_elements, get_more_places_button, get_pages_url,\
+        get_reviews_button_xpath, get_lowest_reviews_xpath, get_all_reviews, Place
+
 
 PATH = os.path.abspath(os.path.dirname(__file__))
 

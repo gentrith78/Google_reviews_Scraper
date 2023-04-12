@@ -6,16 +6,18 @@ import time
 import pandas as pd
 from playwright.sync_api import sync_playwright
 
-from extractor.xpath_extracter import  get_xpath_list
 
 try:
     from ..logger_m import logger_inst
     from . import ProcessPage, ProcessSearch, GetProxy, GetContext
+    from extractor.xpath_extracter import  get_xpath_list
 except:
     sys.path.append('.')
     sys.path.append('..')
     from logger_m import logger_inst
-    from . import ProcessPage, ProcessSearch, GetProxy, GetContext
+    from xpath_extracter import get_xpath_list
+    from automator_snippets import *
+    # from . import ProcessPage, ProcessSearch, GetProxy, GetContext
 
 PATH = os.path.abspath(os.path.dirname(__file__))
 PROJECT_PATH = os.path.dirname(os.path.dirname(PATH))
@@ -83,4 +85,4 @@ def get_reviews(keyword):
         return True
 
 if __name__ == '__main__':
-    get_reviews('london restaurants')
+    pass
