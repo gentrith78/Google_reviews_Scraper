@@ -6,15 +6,14 @@ import time
 import pandas as pd
 from playwright.sync_api import sync_playwright
 
-from extractor.xpath_extracter import get_search_html_elements, get_more_places_button, get_pages_url, get_xpath_list,\
-    get_reviews_button_xpath, get_lowest_reviews_xpath, get_all_reviews, Place
+from extractor.xpath_extracter import  get_xpath_list
 
 try:
     from ..logger_m import logger_inst
-    from .automator_snippets import ProcessPage, ProcessSearch
+    from .automator_snippets import ProcessPage, ProcessSearch, GetProxy, GetContext
 except:
     sys.path.append('..')
-    from automator_snippets import ProcessPage, ProcessSearch
+    from automator_snippets import ProcessPage, ProcessSearch, GetProxy, GetContext
     from logger_m import logger_inst
 
 PATH = os.path.abspath(os.path.dirname(__file__))
@@ -25,17 +24,24 @@ print('started')
 def get_reviews(keyword):
     with sync_playwright() as p:
 
-        browser = p.chromium.launch(headless=False,chromium_sandbox=False)
-        context = browser.new_context(no_viewport=True)
-        page = context.new_page()
-        page.goto('https://www.google.com/',wait_until='networkidle')
+        for i in range(50):
+            try:
+                #perform keyword search and click more places
+                browser = GetContext(p)
+                page = browser.get_page()
+                page.goto('https://www.google.com/', wait_until='networkidle')
 
-        #perform keyword search and click more places
-        search_processor = ProcessSearch(keyword,logger_inst)
-
-
-        # get the urls for each page
-        paginations = search_processor.process(page) #will return a list with paginations url
+                search_processor = ProcessSearch(keyword,logger_inst)
+                paginations = search_processor.process(page)  # will return a list with paginations url
+                break
+            except RuntimeError:
+                logger_inst.error(f'Failed to find "More Places" button')
+                return None
+            except Exception as e:
+                browser.close()
+                logger_inst.error(f'Failed search process:{str(e)}')
+                logger_inst.error('Creating new browser')
+                pass
 
         if paginations == None: #couldn't process search
             browser.close()
@@ -75,3 +81,5 @@ def get_reviews(keyword):
         browser.close()
         return True
 
+if __name__ == '__main__':
+    get_reviews('london restaurants')

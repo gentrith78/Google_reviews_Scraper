@@ -14,7 +14,8 @@ class AttrHelpers(): #so we are gonna use this data to find the elements through
     review_button = {'jsname':'AznF2e','data-index':'1'}
     lowest_review_button = {'data-sort-id':'ratingLow'}
     review_div_attrs = {'jscontroller':'I1e3hc','jsaction':'rcuQ6b:npT2md'} #this only contains a list of  divs where on each div exist the review data.
-                                                                            #for each scroll a new similar div is created and it contains 10 new reviews
+
+    review_more_link = {'class':'review-more-link'}                                                                            #for each scroll a new similar div is created and it contains 10 new reviews
     def get_second_helper_SEARCHINPUT(self):
         self.search_field_attr['type'] = 'text'
         return self.search_field_attr

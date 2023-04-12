@@ -1,3 +1,4 @@
+import random
 import time
 from tkinter import messagebox
 
@@ -47,7 +48,7 @@ def get_lowest_reviews_xpath(html_data):
         #means that no reviews or little number of reviews was founded
         pass
 
-def get_all_reviews(html_data):
+def get_all_reviews(logger,page):
     """
     assuming that the bot has scrolled 5 times
     this function will get all of the reviews
@@ -56,10 +57,38 @@ def get_all_reviews(html_data):
     after scrolling 5 times reviews are saved in a div
     for each scroll a new div is created containing 10 reviews
     each of these div has same attr:jscontroller="I1e3hc" ~ jsaction="rcuQ6b:npT2md"
-    :param html_data:
-    :return:
     """
+    html_data = page.content()
+    soup = BeautifulSoup(html_data, features='html.parser')
 
+    place_frame = soup.find('async-local-kp')
+
+    review_packs = place_frame.find_all('div',attr_helpers.review_div_attrs) #this is a list of div that contains 10 more divs with reviews inside
+
+    #click more buttons
+    for review_pack in review_packs:
+        for review_div in review_pack:
+            if review_div.find('strong') != None and review_div.find('strong').text == 'Response from the owner':
+                #TODO add feature to click 'more'
+                # get the owner reply text
+                parent_div = review_div.find('strong').parent.parent #this div conatins the label "'Response from the owner' and another div the actual review, so i select the second div to get the response data
+                # check if 'more' button exists
+                more_review = parent_div.find('a',attr_helpers.review_more_link)
+                if more_review!= None:
+                    try:
+                        print('Founded more btn')
+                        page.click(f"/{xpath_soup(more_review)}",timeout=500)
+                        time.sleep(random.randint(0,2))
+                        print('clicked')
+                    except:
+                        pass
+                actual_response_div = parent_div.find_all('div')[-1]
+                #check if it contains information
+                contacts = find_contact_info(actual_response_div.text)
+                if len(contacts) > 0:
+                    return {'response':actual_response_div.text,'contacts':contacts}
+    #get reviews
+    html_data = page.content()
     soup = BeautifulSoup(html_data, features='html.parser')
 
     place_frame = soup.find('async-local-kp')
@@ -69,14 +98,14 @@ def get_all_reviews(html_data):
     for review_pack in review_packs:
         for review_div in review_pack:
             if review_div.find('strong') != None and review_div.find('strong').text == 'Response from the owner':
-                #TODO add feature to click 'more'
+                # TODO add feature to click 'more'
                 # get the owner reply text
-                parent_div = review_div.find('strong').parent.parent #this div conatins the label "'Response from the owner' and another div the actual review, so i select the second div to get the response data
+                parent_div = review_div.find('strong').parent.parent  # this div conatins the label "'Response from the owner' and another div the actual review, so i select the second div to get the response data
                 actual_response_div = parent_div.find_all('div')[-1]
-                #check if it contains information
+                # check if it contains information
                 contacts = find_contact_info(actual_response_div.text)
                 if len(contacts) > 0:
-                    return {'response':actual_response_div.text,'contacts':contacts}
+                    return {'response': actual_response_div.text, 'contacts': contacts}
     return {'response': 'None', 'contacts': 'None'}
 
 

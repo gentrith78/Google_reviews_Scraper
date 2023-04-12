@@ -1,10 +1,41 @@
+import os
 import time
 import random
 
-import pandas as pd
 
-from extractor.xpath_extracter import get_search_html_elements, get_more_places_button, get_pages_url, get_xpath_list,\
+from extractor.xpath_extracter import get_search_html_elements, get_more_places_button, get_pages_url,\
     get_reviews_button_xpath, get_lowest_reviews_xpath, get_all_reviews, Place
+
+PATH = os.path.abspath(os.path.dirname(__file__))
+
+class GetProxy():
+    def __init__(self):
+        self.username = 'goroyal'
+        self.password = 'reviewsproxies'
+        self.string_proxy = ''
+        with open(os.path.join(PATH,'Proxy_list.txt'),'r') as f:
+            proxy_string = random.choice(f.readlines())
+            self.string_proxy = proxy_string.replace('\n','')
+
+    def get_proxy(self):
+        print(self.string_proxy)
+        return {
+            'server': f"http://{self.string_proxy}",
+            'username':self.username,
+            'password':self.password,
+        }
+class GetContext():
+    def __init__(self,p):
+        self.p = p
+        self.proxy = GetProxy().get_proxy()
+        self.browser = ''
+    def get_page(self):
+        self.browser = self.p.chromium.launch(headless=True,chromium_sandbox=False,proxy=self.proxy)
+        context = self.browser.new_context(no_viewport=True)
+        page = context.new_page()
+        return page
+    def close(self):
+        self.browser.close()
 
 
 class ProcessSearch():
@@ -32,6 +63,7 @@ class ProcessSearch():
             page.wait_for_load_state('networkidle')
         except Exception as e:
             self.logger_.error(f'Error while Clicking "More Places" button: {str(e)}')
+            raise RuntimeError #this means that we couldn't find this button meanin that there are no places
 
     def get_pagination_urls(self,page):
         try:
@@ -48,8 +80,7 @@ class ProcessSearch():
                     paginations.insert(0, page.url)
                     self.logger_.info(f"{len(paginations)} Pages to paginate")
                     return paginations
-        return None
-
+        raise Exception
 
 
 
@@ -98,7 +129,7 @@ class ProcessPage():
 
 
     def perform_reviews_extraction(self,page):
-        reviews_data = get_all_reviews(page.content())
+        reviews_data = get_all_reviews(self.logger,page)
         if reviews_data != None:
             self.logger.info(f"{reviews_data['contacts']}")
             place_data = Place(Name=self.place['place_div_name'], Page=str(self.ind_page + 1), Contacts=reviews_data['contacts'],

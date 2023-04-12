@@ -1,5 +1,4 @@
 import os
-import time
 
 from extractor import get_reviews
 from first_start import check_firstStart
@@ -29,4 +28,5 @@ if __name__ == '__main__':
 
 #TODO change first_start.txt
 #TODO enable headless mode
-#TODO
+#TODO delete sample html
+#TODO delete logs
