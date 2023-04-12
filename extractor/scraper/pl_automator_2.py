@@ -10,11 +10,12 @@ from extractor.xpath_extracter import  get_xpath_list
 
 try:
     from ..logger_m import logger_inst
-    from .automator_snippets import ProcessPage, ProcessSearch, GetProxy, GetContext
+    from . import ProcessPage, ProcessSearch, GetProxy, GetContext
 except:
+    sys.path.append('.')
     sys.path.append('..')
-    from automator_snippets import ProcessPage, ProcessSearch, GetProxy, GetContext
     from logger_m import logger_inst
+    from . import ProcessPage, ProcessSearch, GetProxy, GetContext
 
 PATH = os.path.abspath(os.path.dirname(__file__))
 PROJECT_PATH = os.path.dirname(os.path.dirname(PATH))
