@@ -1,6 +1,4 @@
 import sys
-import os
-import time
 
 import pandas as pd
 from playwright.sync_api import sync_playwright
@@ -16,7 +14,6 @@ except:
     from .xpath_extracter import get_xpath_list
     from .logger_m import logger_inst
     from .automator_snippets import *
-    # from . import ProcessPage, ProcessSearch, GetProxy, GetContext
 
 PATH = os.path.abspath(os.path.dirname(__file__))
 PROJECT_PATH = os.path.dirname(os.path.dirname(PATH))
