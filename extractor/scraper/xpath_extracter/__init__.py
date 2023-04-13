@@ -15,4 +15,4 @@ from .list_place_extractor import get_xpath_list
 from .reviews import get_reviews_button_xpath, get_lowest_reviews_xpath, get_all_reviews
 from .helper import Place, Places
 from .get_search_pages import get_pages_url
-from .get_search_htmlElements import get_search_html_elements, get_more_places_button
+from .get_search_htmlElements import get_search_html_elements, get_more_places_button, get_englishLanguage, accept_cookies

@@ -1,19 +1,22 @@
 import sys
-import random
 import os
 import time
 
 import pandas as pd
 from playwright.sync_api import sync_playwright
 
-from extractor.xpath_extracter import get_search_html_elements, get_more_places_button, get_pages_url, get_xpath_list,\
-    get_reviews_button_xpath, get_lowest_reviews_xpath, get_all_reviews, Place
 
 try:
-    from ..logger_m import logger_inst
-except:
-    sys.path.append('..')
+    from xpath_extracter import get_xpath_list
     from logger_m import logger_inst
+    from automator_snippets import *
+except:
+    sys.path.append('.')
+    sys.path.append('..')
+    from .xpath_extracter import get_xpath_list
+    from .logger_m import logger_inst
+    from .automator_snippets import *
+    # from . import ProcessPage, ProcessSearch, GetProxy, GetContext
 
 PATH = os.path.abspath(os.path.dirname(__file__))
 PROJECT_PATH = os.path.dirname(os.path.dirname(PATH))
@@ -22,36 +25,33 @@ print('started')
 
 def get_reviews(keyword):
     with sync_playwright() as p:
-        browser = p.chromium.launch(headless=False,chromium_sandbox=False)
-        context = browser.new_context(no_viewport=True)
-        page = context.new_page()
-        page.goto('https://www.google.com/',wait_until='networkidle')
 
-        # go to google and make a search with keyword
-        search_input_xpath = f"/{get_search_html_elements(page.content())}"
-        page.type(selector=search_input_xpath,text=str(keyword))
+        for i in range(15):
+            try:
+                #perform keyword search and click more places
+                browser = GetContext(p)
+                page = browser.get_page()
+                url = f'https://www.google.com/search?q={keyword}&hl=en'
+                page.goto(url, wait_until='networkidle',timeout=50000)
+                search_processor = ProcessSearch(keyword,logger_inst)
+                paginations = search_processor.process(page)  # will return a list with paginations url
+                break
+            except RuntimeError:
+                logger_inst.error(f'Failed to find "More Places" button')
+                return None
+            except Exception as e:
+                browser.close()
+                logger_inst.error(f'Failed search process:{str(e)}')
+                logger_inst.error('Creating new browser')
+                pass
 
-        time.sleep(random.randint(1,3))
-        page.keyboard.press("Enter")
-        time.sleep(10)
-
-        # got to places
-        #TODO add handler when places not found
-        more_places_button = f"/{get_more_places_button(page.content())}"
-        page.click(more_places_button)
-        time.sleep(5)
-
-        # get the urls for each page
-        paginations = get_pages_url(page.content())
-        # add the current url in the pagination link since it won't find the active page xpath
-        paginations.insert(0,page.url)
-
-        logger_inst.info(f"{len(paginations)} to paginate")
-
+        if paginations == None: #couldn't process search
+            browser.close()
+            return None
         for ind_page, url in enumerate(paginations):
 
             #navigating
-            page.goto(url,wait_until='networkidle')
+            page.goto(url+"&hl=en",wait_until='networkidle')
 
             logger_inst.info(f'Navigated to page:{ind_page+1}')
 
@@ -63,50 +63,12 @@ def get_reviews(keyword):
             df = pd.DataFrame(columns=['Name', 'Page', 'Contacts', 'Potential_Response', "Url"])
             try:
                 for place in place_list_info:
-                    logger_inst.info(f"Processing {place['place_div_name']}")
-                    page.click(f"/{place['place_div_name_div']}")
-                    logger_inst.info('Clicked')
-                    time.sleep(random.randint(2, 4))
-
-                    #clicking reviews button
-                    reviews_button_xpath = get_reviews_button_xpath(html_data=page.content())
-                    page.click(f"/{reviews_button_xpath}")
-                    logger_inst.info('Clicked Reviews')
-                    time.sleep(random.randint(1, 3))
-
-                    #clicking lowest rating
-                    try:
-                        lowest_rating_reviews_xpath = get_lowest_reviews_xpath(html_data=page.content())
-                        if lowest_rating_reviews_xpath == None:
-                            # no reviews
-                            place_data = Place(Name=place['place_div_name'], Page=str(ind_page + 1),
-                                               Contacts="None", Potential_Response="None",Url=page.url)
-                            df.loc[len(df)] = [place_data.Name, place_data.Page, place_data.Contacts,
-                                               place_data.Potential_Response, place_data.Url]
-                            continue
-                        page.click(f'/{lowest_rating_reviews_xpath}')
-                        logger_inst.info('Clicked Lowest Rating Reviews')
-                    except Exception as e:
-                        logger_inst.error('Error while clicking "lowest rating":')
-                        logger_inst.error(str(e))
-                    # Perform scrolling 5 times
-                    page.hover(f'/{lowest_rating_reviews_xpath}')
-                    for scroll_ in range(5):
-                        logger_inst.info('Scrolling')
-                        for pg_down in range(4):
-                            page.keyboard.press('PageDown')
-                            time.sleep(0.5)
-                        time.sleep(random.randint(1, 3))
-
-                    logger_inst.info('Scrolled')
-                    # Get reviews and check if contacts are detected
-                    reviews_data = get_all_reviews(page.content())
-                    logger_inst.info(reviews_data['contacts'])
-                    place_data = Place(Name=place['place_div_name'],Page=str(ind_page+1),Contacts=reviews_data['contacts'],Potential_Response=reviews_data['response'],Url=page.url)
+                    place_processor = ProcessPage(place, ind_page,logger_inst)
+                    place_data = place_processor.process(page)
                     df.loc[len(df)] = [place_data.Name, place_data.Page, place_data.Contacts, place_data.Potential_Response,place_data.Url]
-                    logger_inst.info('#########')
+
             except Exception as e_inpage:
-                print(e_inpage)
+                logger_inst.error(f"Couldn't process page {ind_page+1} -- Error: {str(e_inpage)}")
 
             #save to output
             logger_inst.info(f'Saving Page {ind_page +1}')
@@ -118,6 +80,8 @@ def get_reviews(keyword):
 
         logger_inst.info('###################################')
         browser.close()
+        return True
 
 if __name__ == '__main__':
     get_reviews('london restaurants')
+    pass

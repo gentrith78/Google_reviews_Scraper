@@ -3,7 +3,7 @@ try:
     from .helper import AttrHelpers
     from .xpath_finder import xpath_soup
 except:
-    from extractor.xpath_extracter.helper import AttrHelpers
+    from extractor.scraper.xpath_extracter.helper import AttrHelpers
     from xpath_finder import xpath_soup
 
 

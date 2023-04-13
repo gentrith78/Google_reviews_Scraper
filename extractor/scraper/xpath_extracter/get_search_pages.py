@@ -12,9 +12,10 @@ def get_pages_url(html_data):
 
     soup = BeautifulSoup(html_data,features='html.parser')
 
-    #get div of pages table
+    #get div of table that contains pages url
     page_table_div = soup.find('div',attr_helpers.div_of_pages_table)
-
+    if page_table_div == None:
+        page_table_div = soup.select_one('div[aria-label="Local results pagination"]')
     #get table rows
     pages_table_rows = page_table_div.find_all('td')
     for page in pages_table_rows:

@@ -1,8 +1,8 @@
 from bs4 import BeautifulSoup
 try:
-    from xpath_extracter.helper import AttrHelpers
+    from extractor.scraper.xpath_extracter import AttrHelpers
 except:
-    from xpath_extracter.helper import AttrHelpers
+    from extractor.scraper.xpath_extracter import AttrHelpers
 
 # Attribute Data for the div elements that contains all places
 attr_helpers = AttrHelpers()
@@ -59,7 +59,7 @@ def get_xpath_list(html_data):
 if __name__ == '__main__':
 
     # 1: Find the list div
-    with open('xpath_extracter/sample.txt', 'r', encoding='utf8') as f:
+    with open('scraper/xpath_extracter/sample.txt', 'r', encoding='utf8') as f:
         html_data = str(f.read())
         a = get_xpath_list(html_data)
         for aa in a:

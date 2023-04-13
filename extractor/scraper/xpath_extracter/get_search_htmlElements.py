@@ -30,6 +30,18 @@ def get_more_places_button(html_data):
             return xpath_soup(span)
 
 
+def get_englishLanguage(html_data):
+    soup = BeautifulSoup(html_data,features='html.parser')
+    english_button_div = soup.find('div',attrhelpers.search_field_attr)
+
+    return xpath_soup(english_button_div.find_all('a')[-1]) #this div has only on <a> tag
+
+def accept_cookies(html_data):
+    soup = BeautifulSoup(html_data,features='html.parser')
+    for btn in soup.find_all('button'):
+        if btn.text == 'Accept all':
+            return xpath_soup(btn)
+
 if __name__ == '__main__':
     with open('sample.txt','r',encoding='utf8') as f:
         html_data = f.read()
