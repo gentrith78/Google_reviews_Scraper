@@ -10,9 +10,10 @@ check_firstStart()
 PATH = os.path.abspath(os.path.dirname(__file__))
 
 def get_keywords():
-    input_file = os.listdir(os.path.join(PATH,'input'))[0]
+    input_file = os.listdir(os.path.join(PATH,'input'))[-1]
     with open(os.path.join(PATH,'input',input_file),'r') as f:
         keywords_raw = list(k.rstrip() for k in f.readlines())
+        print(keywords_raw)
         keywrods = []
         for keyword_ in keywords_raw:
             if keyword_.isdigit() or keyword_.isspace() or keyword_ == '':

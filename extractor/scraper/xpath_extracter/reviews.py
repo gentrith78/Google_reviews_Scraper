@@ -2,6 +2,7 @@ import random
 import time
 
 from bs4 import BeautifulSoup
+from selenium.webdriver.common.by import By
 
 try:
     from .list_place_extractor import get_xpath_list
@@ -47,7 +48,7 @@ def get_lowest_reviews_xpath(html_data):
         #means that no reviews or little number of reviews was founded
         pass
 
-def get_all_reviews(logger,page):
+def get_all_reviews(logger,driver):
     """
     assuming that the bot has scrolled 5 times
     this function will get all of the reviews
@@ -57,7 +58,7 @@ def get_all_reviews(logger,page):
     for each scroll a new div is created containing 10 reviews
     each of these div has same attr:jscontroller="I1e3hc" ~ jsaction="rcuQ6b:npT2md"
     """
-    html_data = page.content()
+    html_data = driver.page_source
     soup = BeautifulSoup(html_data, features='html.parser')
 
     place_frame = soup.find('async-local-kp')
@@ -66,21 +67,16 @@ def get_all_reviews(logger,page):
 
     #click more buttons
     for review_pack in review_packs:
-        for review_div in review_pack:
-            if review_div.find('strong') != None and review_div.find('strong').text == 'Response from the owner':
-                parent_div = review_div.find('strong').parent.parent #this div conatins the label "'Response from the owner' and another div the actual review, so i select the second div to get the response data
-                # check if 'more' button exists
-                more_review = parent_div.find('a',attr_helpers.review_more_link)
-                if more_review!= None:
-                    try:
-                        print('Founded more btn')
-                        page.click(f"/{xpath_soup(more_review)}",timeout=500)
-                        time.sleep(random.randint(0,2))
-                        print('clicked')
-                    except:
-                        pass
+        more_links = review_pack.find_all('a', attr_helpers.review_more_link)
+        for more in more_links:
+            try:
+                driver.find_element(By.XPATH, f"/{xpath_soup(more)}").click()
+                time.sleep(random.randint(0,2))
+            except:
+                pass
+
     #get reviews
-    html_data = page.content()
+    html_data = driver.page_source
     soup = BeautifulSoup(html_data, features='html.parser')
 
     place_frame = soup.find('async-local-kp')
@@ -93,7 +89,7 @@ def get_all_reviews(logger,page):
         for review_div in review_pack:
             if review_div.find('strong') != None and review_div.find('strong').text == 'Response from the owner':
                 # get the owner reply text
-                parent_div = review_div.find('strong').parent.parent  # this div conatins the label "'Response from the owner' and another div the actual review, so i select the second div to get the response data
+                parent_div = review_div.find('strong').parent.parent.parent  # this div conatins the label "'Response from the owner' and another div the actual review, so i select the second div to get the response data
                 actual_response_div = parent_div.find_all('div')[-1]
                 # check if it contains information
                 contacts = find_contact_info(actual_response_div.text)

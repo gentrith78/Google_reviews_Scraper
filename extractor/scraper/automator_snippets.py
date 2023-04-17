@@ -3,7 +3,9 @@ import time
 import random
 
 from playwright_stealth import stealth_sync
-
+from selenium.webdriver.common.by import By
+from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.common.keys import Keys
 try:
     from .xpath_extracter import get_search_html_elements, get_more_places_button, get_pages_url,\
         get_reviews_button_xpath, get_lowest_reviews_xpath, get_all_reviews, Place, get_englishLanguage, accept_cookies
@@ -30,7 +32,6 @@ class GetProxy():
             self.string_proxy = proxy_string.replace('\n','')
 
     def get_proxy(self):
-        print(self.string_proxy)
         return {
             'server': f"http://{self.string_proxy}",
             'username':self.username,
@@ -55,60 +56,37 @@ class ProcessSearch():
     def __init__(self,keyword_,logger_):
         self.keyword_ = keyword_
         self.logger_ = logger_
-    def process_search(self,page):
-        # go to google and make a search with keyword
-        try:
-            try:
-                search_input_xpath = f"/{get_search_html_elements(page.content())}"
-            except:
-                #didn't find the search input field, can be because the browser language is not English
-                #Switching to english
-                self.logger_.error(f'While finding "search input", trying to convert to english')
-                english_lang_switch_xpath = get_englishLanguage(page.content())
-                page.click(f"/{english_lang_switch_xpath}")
-                search_input_xpath = f"/{get_search_html_elements(page.content())}"
-                self.logger_.info(f'Converted to English')
 
-                pass
-            page.type(selector=search_input_xpath,text=str(self.keyword_))
-
-            time.sleep(random.randint(1,3))
-            page.keyboard.press("Enter")
-            time.sleep(10)
-        except Exception as e:
-            self.logger_.error(f'Error while filling Search: {str(e)}')
-            return False #the search could not be processed, return a value different than none in order for process function to know that has failed
-
-    def process_MorePlaces_button(self,page):
+    def process_MorePlaces_button(self, driver):
         # got to places
         try:
-            more_places_button = f"/{get_more_places_button(page.content())}"
-            page.click(more_places_button)
+            more_places_button = f"/{get_more_places_button(driver.page_source)}"
+            driver.find_element(By.XPATH, more_places_button).click()
             time.sleep(15)
         except Exception as e:
             try: #sometimes Cookie acception frame occurs, There script tries to find "accept all" button and to click it
-                accept_cookies_button_xpath = accept_cookies(page.content())
-                page.click(f"/{accept_cookies_button_xpath}")
+                accept_cookies_button_xpath = accept_cookies(driver.page_source)
+                more_button = driver.find_element(By.XPATH,f"/{accept_cookies_button_xpath}").click()
                 time.sleep(3)
-                more_places_button = f"/{get_more_places_button(page.content())}"
-                page.click(more_places_button)
+                more_places_button = f"/{get_more_places_button(driver.page_source)}"
+                driver.find_element(By.XPATH, more_places_button).click()
                 time.sleep(15)
             except:
                 self.logger_.error(f'Error while Clicking "More Places" button: {str(e)}')
                 return False
-    def get_pagination_urls(self,page):
+    def get_pagination_urls(self,driver):
         try:
-            return get_pages_url(page.content())
+            return get_pages_url(driver.page_source)
         except Exception as e:
             self.logger_.error(f'Error while parsing Pagination urls: {str(e)}')
 
-    def process(self,page):
+    def process(self, driver):
 
-        # if  self.process_search(page) == None:
-        if self.process_MorePlaces_button(page) == None:
-            paginations = self.get_pagination_urls(page)
+        # if  self.process_search(driver) == None:
+        if self.process_MorePlaces_button(driver) == None:
+            paginations = self.get_pagination_urls(driver)
             if paginations != None:
-                paginations.insert(0, page.url)
+                paginations.insert(0, driver.current_url)
                 self.logger_.info(f"{len(paginations)} Pages to paginate")
                 return paginations
         raise Exception
@@ -122,32 +100,27 @@ class ProcessPage():
         self.ind_page = ind_page
         self.logger  = logger
 
-    def perform_name_click(self,page):
-
-        page.click(f"/{self.place['place_div_name_div']}")
+    def perform_name_click(self,driver):
+        driver.find_element(By.XPATH,f"/{self.place['place_div_name_div']}").click()
         time.sleep(random.randint(2, 4))
 
-    def perform_reviews_click(self,page):
+    def perform_reviews_click(self,driver):
 
-        reviews_button_xpath = get_reviews_button_xpath(html_data=page.content())
-        page.click(f"/{reviews_button_xpath}")
+        reviews_button_xpath = get_reviews_button_xpath(html_data=driver.page_source)
+        driver.find_element(By.XPATH,f"/{reviews_button_xpath}").click()
         time.sleep(random.randint(1, 3))
 
-    def perform_lowestReview_click_and_scrollin(self,page):
+    def perform_lowestReview_click_and_scrollin(self,driver):
         try:
-            lowest_rating_reviews_xpath = get_lowest_reviews_xpath(html_data=page.content())
-
-            page.click(f'/{lowest_rating_reviews_xpath}')
+            lowest_rating_reviews_xpath = get_lowest_reviews_xpath(html_data=driver.page_source)
+            driver.find_element(By.XPATH,f"/{lowest_rating_reviews_xpath}").click()
 
             self.logger.info('Clicked Lowest Rating Reviews')
-
-            page.hover(f'/{lowest_rating_reviews_xpath}')
-            time.sleep(random.randint(3, 5))
 
             # scroll
             for scroll_ in range(5):
                 for pg_down in range(4):
-                    page.keyboard.press('PageDown')
+                    driver.find_element(By.XPATH,f"/{lowest_rating_reviews_xpath}").send_keys(Keys.PAGE_DOWN)
                     time.sleep(0.5)
                 time.sleep(random.randint(1, 3))
             self.logger.info('Performed Scrolling')
@@ -159,41 +132,41 @@ class ProcessPage():
 
 
 
-    def perform_reviews_extraction(self,page):
-        reviews_data = get_all_reviews(self.logger,page)
+    def perform_reviews_extraction(self,driver):
+        reviews_data = get_all_reviews(self.logger,driver)
         if reviews_data != None:
             self.logger.info(f"{reviews_data['contacts']}")
             place_data = Place(Name=self.place['place_div_name'], Page=str(self.ind_page + 1), Contacts=reviews_data['contacts'],
-                               Potential_Response=reviews_data['response'], Url=page.url)
+                               Potential_Response=reviews_data['response'], Url=driver.current_url)
             return place_data
         return None
-    def process(self,page):
+    def process(self,driver):
 
         self.logger.info(f"Processing: {self.place['place_div_name']}")
 
         #not processed place
         place_data = Place(Name=self.place['place_div_name'], Page=str(self.ind_page + 1),
                            Contacts='None', Potential_Response='None',
-                           Url=page.url)
+                           Url=driver.current_url)
 
-        check_if__placeDiv_is_Clickable = self.perform_name_click(page)
+        check_if__placeDiv_is_Clickable = self.perform_name_click(driver)
         if check_if__placeDiv_is_Clickable !=  None: #if this isn't None means that playwright couldn't perform click GOOD TO GO
             return place_data
 
-        check_if_reviewButton_is_clickable = self.perform_reviews_click(page)
+        check_if_reviewButton_is_clickable = self.perform_reviews_click(driver)
         if check_if_reviewButton_is_clickable != None: #if this isn't None means that playwright couldn't perform click GOOD TO GO
-            try:#try to refresh the page and then click again the place
-                page.reload(wait_until = 'networkidle')
-                if self.perform_name_click(page) != None:
+            try:#try to refresh the driver and then click again the place
+                driver.refresh()
+                if self.perform_name_click(driver) != None:
                     return place_data
             except:
                 return place_data
 
-        check_if_reviews_exist = self.perform_lowestReview_click_and_scrollin(page)
+        check_if_reviews_exist = self.perform_lowestReview_click_and_scrollin(driver)
         if check_if_reviews_exist != None: #if this isn't None means that playwright couldn't perform click GOOD TO GO
             return place_data
         else:
-            place_data = self.perform_reviews_extraction(page)
+            place_data = self.perform_reviews_extraction(driver)
             if place_data != None:
                 return place_data
 

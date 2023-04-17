@@ -22,7 +22,7 @@ def get_pages_url(html_data):
         try:
             pages_urls.append(f"https://www.google.com{page.find('a')['href']}")
         except:
-            # the "href" will not be found in active page
+            # the "href" will not be found in active driver
             pass
     return pages_urls
 

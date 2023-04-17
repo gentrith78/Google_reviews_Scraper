@@ -7,7 +7,7 @@ class AttrHelpers(): #so we are gonna use this data to find the elements through
     search_field_attr = {'title':'Search','type':'search'}
     switch_to_english_attr = {'id':'SIvCob'}
 
-    pages_table_attr = {'jsname':'TeSSVd'} #this is a <tr> elements that contains <td> elements, inside each <td> is an href for the next page of the search results
+    pages_table_attr = {'jsname':'TeSSVd'} #this is a <tr> elements that contains <td> elements, inside each <td> is an href for the next driver of the search results
     div_of_pages_table = {'aria-label':'Local Results Pagination'} # the above table is located inside this div
 
     list_div_attr = {'class':'rlfl__tls rl_tls'} #class="rlfl__tls rl_tls"
@@ -49,4 +49,4 @@ class Contact:
             if el == "" or str(el).isspace() or len(el) < 7:
                 continue
             final_contacts.append(final_contacts)
-# Get all the response from the owners in a review and  save so we can check  then after scraping that page of reviews.
+# Get all the response from the owners in a review and  save so we can check  then after scraping that driver of reviews.

@@ -50,7 +50,7 @@ def get_reviews(keyword):
             #navigating
             page.goto(url+"&hl=en",wait_until='networkidle')
 
-            logger_inst.info(f'Navigated to page:{ind_page+1}')
+            logger_inst.info(f'Navigated to drive:{ind_page+1}')
 
             place_list_info = get_xpath_list(page.content())
 
@@ -65,7 +65,7 @@ def get_reviews(keyword):
                     df.loc[len(df)] = [place_data.Name, place_data.Page, place_data.Contacts, place_data.Potential_Response,place_data.Url]
 
             except Exception as e_inpage:
-                logger_inst.error(f"Couldn't process page {ind_page+1} -- Error: {str(e_inpage)}")
+                logger_inst.error(f"Couldn't process drive {ind_page+1} -- Error: {str(e_inpage)}")
 
             #save to output
             logger_inst.info(f'Saving Page {ind_page +1}')

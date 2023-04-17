@@ -1,0 +1,15 @@
+To check the version of Google Chrome, you can follow these steps:
+
+Open Google Chrome browser
+Click on the three dots (settings) icon in the top right corner of the browser window
+Click on "Help" from the dropdown menu
+Click on "About Google Chrome" from the submenu
+
+remove last part from google version nr
+from 112.0.5615.86
+to 112.0.5615
+
+Query this url:
+https://chromedriver.storage.googleapis.com/index.html?path=<the version>
+
+TO: https://chromedriver.storage.googleapis.com/index.html?path=110.0.5481
