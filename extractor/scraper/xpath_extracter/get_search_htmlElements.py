@@ -26,7 +26,7 @@ def get_more_places_button(html_data):
 
     spans = soup.find_all('span')
     for span in spans:
-        if span.text == 'More places':
+        if span.text == 'More places' or str(span.text) == 'More businesses' :
             return xpath_soup(span)
 
 

@@ -94,11 +94,11 @@ def get_all_reviews(logger,driver):
                 # check if it contains information
                 contacts = find_contact_info(actual_response_div.text)
                 if len(contacts) > 0:
-                    contacts_final.append(contacts)
+                    contacts_final.append(" ".join(contacts))
                     random_response = actual_response_div.text
 
     if len(contacts_final) > 0:
-        return {'response': random_response, 'contacts': contacts_final}
+        return {'response': random_response, 'contacts': "".join(contacts_final)}
     return {'response': 'None', 'contacts': "None"}
 
 

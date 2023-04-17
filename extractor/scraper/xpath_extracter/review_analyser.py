@@ -1,6 +1,30 @@
 import re
 
+desired_domains = ['.com','.net','.org','.ca','.co.uk',
+                   '.management','.biz','.us','.co','.com.au'
+                   ,'edu','.nz','.pub','.uk','eu','.biz']
 
+phone_nr_keywords = [
+    'call',
+    'phone number',
+    'telephone number',
+]
+
+def check_email_match(email):
+    if "@" in str(email):
+        if len(email) <= 7:
+            return email
+    for el in desired_domains:
+        if str(email).endswith(el):
+            return email
+    return False
+
+def find_by_text_algo(text):
+    for keyword in phone_nr_keywords:
+        if keyword in text:
+            possible_match = re.search('\d{9,}',text).group()
+            return possible_match
+    return None
 def find_contact_info(text):
     # Define regular expressions for different types of contact info
     email_url_re_with_hhtps = r'https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)'
@@ -12,47 +36,58 @@ def find_contact_info(text):
     matches = []
 
     try:
-        email_regex = re.search(email_url_re_with_hhtps, text,re.IGNORECASE).group()
+        email_regex = re.search(email_url_re_with_hhtps, text, re.MULTILINE).group()
         matches.append(email_regex)
     except:
         pass
 
     try:
-        email_regex2 = re.search(email_url_re_without_https, text,re.IGNORECASE).group()
-        matches.append(email_regex2)
+        for email in re.compile(email_url_re_without_https).finditer(text):
+            email = check_email_match(email.group())
+            if email:
+                matches.append(email)
+            else:
+                pass
     except:
         pass
-
     try:
-        phone_regex1 = re.search(us_phonenumbers_pattern, text,re.IGNORECASE).group()
+        phone_regex1 = re.search(us_phonenumbers_pattern, text).group()
         matches.append(phone_regex1)
     except:
         pass
     try:
-        phone_regex2 = re.search(non_us_phonenumber_patterns, text,re.IGNORECASE).group()
+        phone_regex2 = re.search(non_us_phonenumber_patterns, text).group()
         matches.append(phone_regex2)
     except:
         pass
     try:
-        phone_regex3 = re.search(non_standard_phonenumbers_pattern, text,re.IGNORECASE).group()
+        phone_regex3 = re.search(non_standard_phonenumbers_pattern, text).group()
         matches.append(phone_regex3)
     except:
         pass
-
-
-
+    try:
+        match_algo_phone = find_by_text_algo(text)
+        if match_algo_phone != None:
+            matches.append(match_algo_phone)
+    except:
+        pass
     # Remove duplicates
     matches = list(set(matches))
+
     final_contacts = []
     for contact in matches:
-        if contact == "" or str(contact).isspace() or len(contact) < 7:
+        if contact == "" or str(contact).isspace() or len(contact) <= 7:
             continue
-        final_contacts.append(final_contacts)
+        final_contacts.append(contact)
 
-    return matches
+
+    return final_contacts
 
 if __name__ == '__main__':
-    text = """
-Hi Georgia, I'm so sorry to hear that you were not fully happy with your experience. Could you please send us an email at Reservations@ikoyilondon.com and we can further discuss this? Thank you.
+    textemail = """
+    Thank you for taking the time to review your recent visit.I am sorry that the manager on duty & host we can discuss any problems you â€¦Thank you for taking the time to review your recent visit.I am sorry that the manager on duty & host were an issue if you could contact me feedbackliverpool@gustorestaurants.uk.com we can discuss any problems you encountered.RegardsLisa DixonGeneral ManagerMore
     """
-    print(find_contact_info(text))
+    text_phone = """
+    Hi Peter,I am sorry to see you have rated your visit with us this afternoon just 1*. â€¦Hi Peter,I am sorry to see you have rated your visit with us this afternoon just 1*.Please do not hesitate to contact us if you wish to discuss your visit further info@panoramic34.com or you call 01512365534.More
+    """
+    print(find_contact_info(textemail))
