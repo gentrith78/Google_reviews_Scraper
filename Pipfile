@@ -12,6 +12,7 @@ bs4 = "*"
 lxml = "*"
 spacy = "*"
 playwright-stealth = "*"
+selenium = "*"
 
 [dev-packages]
 
