@@ -7,6 +7,8 @@ class AttrHelpers(): #so we are gonna use this data to find the elements through
     search_field_attr = {'title':'Search','type':'search'}
     switch_to_english_attr = {'id':'SIvCob'}
 
+    next_business_page = {'jscontroller':'soHxf','aria-label':'Next'}
+
     pages_table_attr = {'jsname':'TeSSVd'} #this is a <tr> elements that contains <td> elements, inside each <td> is an href for the next driver of the search results
     div_of_pages_table = {'aria-label':'Local Results Pagination'} # the above table is located inside this div
 
@@ -19,6 +21,7 @@ class AttrHelpers(): #so we are gonna use this data to find the elements through
     review_div_attrs = {'jscontroller':'I1e3hc','jsaction':'rcuQ6b:npT2md'} #this only contains a list of  divs where on each div exist the review data.
 
     review_more_link = {'class':'review-more-link'}                                                                            #for each scroll a new similar div is created and it contains 10 new reviews
+
     def get_second_helper_SEARCHINPUT(self):
         self.search_field_attr['type'] = 'text'
         return self.search_field_attr
@@ -49,4 +52,5 @@ class Contact:
             if el == "" or str(el).isspace() or len(el) < 7:
                 continue
             final_contacts.append(final_contacts)
+
 # Get all the response from the owners in a review and  save so we can check  then after scraping that driver of reviews.

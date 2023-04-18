@@ -5,12 +5,10 @@ from bs4 import BeautifulSoup
 from selenium.webdriver.common.by import By
 
 try:
-    from .list_place_extractor import get_xpath_list
     from .helper import AttrHelpers,Contact
     from .xpath_finder import xpath_soup
     from .review_analyser import find_contact_info
 except:
-    from list_place_extractor import get_xpath_list
     from helper import AttrHelpers, Contact
     from xpath_finder import xpath_soup
     from review_analyser import find_contact_info
@@ -98,7 +96,7 @@ def get_all_reviews(logger,driver):
                     random_response = actual_response_div.text
 
     if len(contacts_final) > 0:
-        return {'response': random_response, 'contacts': "".join(contacts_final)}
+        return {'response': random_response, 'contacts': " || ".join(list(set(contacts_final)))}
     return {'response': 'None', 'contacts': "None"}
 
 
@@ -106,3 +104,5 @@ def get_all_reviews(logger,driver):
 if __name__ == '__main__':
     with open('sample.txt','r',encoding='utf8') as f:
         html_data = f.read()
+        print(get_reviews_button_xpath(html_data))
+        print(get_lowest_reviews_xpath(html_data))

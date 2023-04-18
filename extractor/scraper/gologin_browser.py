@@ -1,11 +1,8 @@
 import os
 import random
-import json
-import time
 import zipfile
 
 from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.chrome.options import Options
 from dotenv import load_dotenv
 
@@ -27,7 +24,7 @@ class Create_Profile():
         self.os_for_profile = 'win'
         self.gl = GoLogin({"token":self.gologin_token})
         self.proxy_password = self.get_proxy_password()
-        self.proxy = bool(os.environ.get('PROXY'))
+        self.proxy = str(os.environ.get('PROXY')).lower() == 'true'
     def get_proxy_password(self):
         proxy_string = GetProxy().get_proxy()
         proxy_string = proxy_string['server'].split('@')[0].split(':')[-1]
@@ -94,7 +91,7 @@ class Create_Browser():
         self.profile_id = self.profile.get_profile()
         self.proxy_password = self.profile.proxy_password
         self.gl = GoLogin({"token":self.gologin_token,"profile_id":self.profile_id})
-        self.proxy = bool(os.getenv('Proxy'))
+        self.proxy = str(os.environ.get('PROXY')).lower() == 'true'
     def get_driver(self):
         debugger_address = self.gl.start()
         print(debugger_address)

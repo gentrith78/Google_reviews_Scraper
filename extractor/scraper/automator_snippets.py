@@ -4,14 +4,14 @@ import random
 
 from playwright_stealth import stealth_sync
 from selenium.webdriver.common.by import By
-from selenium.webdriver.common.action_chains import ActionChains
+from selenium.common.exceptions import WebDriverException
 from selenium.webdriver.common.keys import Keys
 try:
     from .xpath_extracter import get_search_html_elements, get_more_places_button, get_pages_url,\
-        get_reviews_button_xpath, get_lowest_reviews_xpath, get_all_reviews, Place, get_englishLanguage, accept_cookies
+        get_reviews_button_xpath, get_lowest_reviews_xpath, get_all_reviews, Place, get_englishLanguage, accept_cookies, get_next_bussinesses_page
 except:
     from xpath_extracter import get_search_html_elements, get_more_places_button, get_pages_url,\
-        get_reviews_button_xpath, get_lowest_reviews_xpath, get_all_reviews, Place, get_englishLanguage, accept_cookies
+        get_reviews_button_xpath, get_lowest_reviews_xpath, get_all_reviews, Place, get_englishLanguage, accept_cookies, get_next_bussinesses_page
 
 
 PATH = os.path.abspath(os.path.dirname(__file__))
@@ -57,16 +57,31 @@ class ProcessSearch():
         self.keyword_ = keyword_
         self.logger_ = logger_
 
-    def process_MorePlaces_button(self, driver):
+    def morePlacesOrBusiness_button_clicking(self, driver):
         # got to places
         try:
-            more_places_button = f"/{get_more_places_button(driver.page_source)}"
-            driver.find_element(By.XPATH, more_places_button).click()
-            time.sleep(15)
+            more_places_button = get_more_places_button(driver.page_source)
+            if more_places_button['mode'] == 'place':
+                self.logger_.info('MODE -- PLACE')
+                more_places_button = f"/{more_places_button['xpath']}"
+                driver.find_element(By.XPATH, more_places_button).click()
+                time.sleep(10)
+            else:
+                if more_places_button['mode'] == 'business':
+                    self.logger_.info('MODE -- BUSINESS')
+                    more_places_button = f"/{more_places_button['xpath']}"
+                    driver.find_element(By.XPATH, more_places_button).click()
+                    time.sleep(10)
+                    try:
+                        next_btn_xpath = get_next_bussinesses_page(driver.page_source) #paginations can be  presented by  a next  button in business mode, if  so, returns a list to be processed in business mode
+                    except:
+                        return None
+                    return ['business', next_btn_xpath] # we are telling the app that MODE IS BUSINESS
+
         except Exception as e:
             try: #sometimes Cookie acception frame occurs, There script tries to find "accept all" button and to click it
                 accept_cookies_button_xpath = accept_cookies(driver.page_source)
-                more_button = driver.find_element(By.XPATH,f"/{accept_cookies_button_xpath}").click()
+                driver.find_element(By.XPATH,f"/{accept_cookies_button_xpath}").click()
                 time.sleep(3)
                 more_places_button = f"/{get_more_places_button(driver.page_source)}"
                 driver.find_element(By.XPATH, more_places_button).click()
@@ -83,12 +98,15 @@ class ProcessSearch():
     def process(self, driver):
 
         # if  self.process_search(driver) == None:
-        if self.process_MorePlaces_button(driver) == None:
+        button_clickin_process = self.morePlacesOrBusiness_button_clicking(driver)
+        if button_clickin_process == None:
             paginations = self.get_pagination_urls(driver)
             if paginations != None:
                 paginations.insert(0, driver.current_url)
                 self.logger_.info(f"{len(paginations)} Pages to paginate")
                 return paginations
+        elif button_clickin_process[0] == 'business':
+            return button_clickin_process
         raise Exception
 
 
@@ -113,10 +131,14 @@ class ProcessPage():
     def perform_lowestReview_click_and_scrollin(self,driver):
         try:
             lowest_rating_reviews_xpath = get_lowest_reviews_xpath(html_data=driver.page_source)
-            driver.find_element(By.XPATH,f"/{lowest_rating_reviews_xpath}").click()
+            try:
+                driver.find_element(By.XPATH,f"/{lowest_rating_reviews_xpath}").click()
+            except WebDriverException:
+                self.logger.error('No reviews')
+                return True
 
             self.logger.info('Clicked Lowest Rating Reviews')
-
+            time.sleep(random.randint(1,3))
             # scroll
             for scroll_ in range(5):
                 for pg_down in range(4):

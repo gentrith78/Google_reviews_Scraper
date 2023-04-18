@@ -40,4 +40,8 @@ def get_xpath_list(html_data):
     return output_data
 
 if __name__ == '__main__':
+    with open('sample.txt','r',encoding='utf8') as f:
+        html_data = f.read()
+        print(get_xpath_list(html_data))
+        pass
     pass

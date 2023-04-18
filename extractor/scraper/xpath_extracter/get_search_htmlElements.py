@@ -26,10 +26,15 @@ def get_more_places_button(html_data):
 
     spans = soup.find_all('span')
     for span in spans:
-        if span.text == 'More places' or str(span.text) == 'More businesses' :
-            return xpath_soup(span)
+        if span.text == 'More places' :
+            return {"xpath":xpath_soup(span),'mode':'place'}
+        if str(span.text) == 'More businesses':
+            return {"xpath": xpath_soup(span), 'mode': 'business'}
 
-
+def get_next_bussinesses_page(html_data):
+    soup = BeautifulSoup(html_data,features='html.parser')
+    btn = soup.find('button',attrhelpers.next_business_page)
+    return xpath_soup(btn)
 def get_englishLanguage(html_data):
     soup = BeautifulSoup(html_data,features='html.parser')
     english_button_div = soup.find('div',attrhelpers.search_field_attr)
@@ -42,7 +47,3 @@ def accept_cookies(html_data):
         if btn.text == 'Accept all':
             return xpath_soup(btn)
 
-if __name__ == '__main__':
-    with open('sample.txt','r',encoding='utf8') as f:
-        html_data = f.read()
-        print(get_more_places_button(html_data))

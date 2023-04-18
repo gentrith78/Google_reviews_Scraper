@@ -30,9 +30,9 @@ def get_reviews(keyword):
             driver = driver_instance.get_driver()
             url = f'https://www.google.com/search?q={keyword}&hl=en'
             driver.get(url)
-            time.sleep(10)
+            time.sleep(5)
             search_processor = ProcessSearch(keyword,logger_inst)
-            paginations = search_processor.process(driver)  # will return a list with paginations url
+            paginations = search_processor.process(driver)  # will return a list with paginations url or a list with two items: item1 'bussines' item2 'next page button xpath'
             break
         except RuntimeError:
             logger_inst.error(f'Failed to find "More Places" button')
@@ -55,41 +55,114 @@ def get_reviews(keyword):
         driver.close()
         driver_instance.delete_profile()
         return None
-    for ind_page, url in enumerate(paginations):
-
-        #navigating
-        driver.get(url+"&hl=en")
-
-        logger_inst.info(f'Navigated to drive:{ind_page+1}')
-
-        place_list_info = get_xpath_list(driver.page_source)
-
-        logger_inst.info(f"Page {ind_page+1} out of {len(paginations)}")
-        logger_inst.info(f"Total {len(place_list_info)} Places in Page {ind_page}")
-
-        df = pd.DataFrame(columns=['Name', 'Page', 'Contacts', 'Potential_Response', "Url"])
-        try:
-            for place in place_list_info:
-                place_processor = ProcessPage(place, ind_page,logger_inst)
-                place_data = place_processor.process(driver)
-                df.loc[len(df)] = [place_data.Name, place_data.Page, place_data.Contacts, place_data.Potential_Response,place_data.Url]
-
-        except Exception as e_inpage:
-            logger_inst.error(f"Couldn't process drive {ind_page+1} -- Error: {str(e_inpage)}")
-
-        #save to output
-        logger_inst.info(f'Saving Page {ind_page +1}')
-        if os.path.exists(os.path.join(PROJECT_PATH,"output",f"{keyword}.csv")):
-            pd.concat([pd.read_csv(os.path.join(PROJECT_PATH,"output",f"{keyword}.csv")),df]).to_csv(os.path.join(PROJECT_PATH,"output",f"{keyword}.csv"),index=False)
-        else:
-            df.to_csv(os.path.join(PROJECT_PATH,"output",f"{keyword}.csv"),index=False)
-        logger_inst.info(f'Saved Page {ind_page +1}')
+    if paginations[0] == 'business':
+        business_mode_process = BusinessProcess(paginations[-1],driver,logger_inst,keyword)
+        business_mode_process.process()
+        #TODO process bussines extraction mode
+        pass
+    else:
+        place_mode_processor = PlaceProcess(driver, logger_inst, keyword, paginations)
+        place_mode_processor.process()
 
     logger_inst.info('###################################')
     driver.close()
     driver_instance.delete_profile()
     return True
 
+class BusinessProcess():
+    def __init__(self, next_button_xpath, driver,logger_inst, keyword_,):
+        self.next_button_xpath = next_button_xpath
+        self.page_index = -1 #to match the 0 starting index
+        self.driver = driver
+        self.logger_inst = logger_inst
+        self.df = pd.DataFrame(columns=['Name', 'Page', 'Contacts', 'Potential_Response', "Url"])
+        self.keyword = keyword_
+    def process_Places(self, ind_page):
+        place_list_info = get_xpath_list(self.driver.page_source)
+        logger_inst.info(f"Total {len(place_list_info)} Places in Page {ind_page}")
+        try:
+            for place in place_list_info:
+                place_processor = ProcessPage(place, ind_page,self.logger_inst)
+                place_data = place_processor.process(self.driver)
+                self.df.loc[len(self.df)] = [place_data.Name, place_data.Page, place_data.Contacts, place_data.Potential_Response,place_data.Url]
+
+        except Exception as e_inpage:
+            self.logger_inst.error(f"Couldn't process drive {ind_page+1} -- Error: {str(e_inpage)}")
+    def save_page_to_csv(self, ind_page):
+        #save to output
+        self.logger_inst.info(f'Saving Page {ind_page +1}')
+        if os.path.exists(os.path.join(PROJECT_PATH,"output",f"{self.keyword}.csv")):
+            pd.concat([pd.read_csv(os.path.join(PROJECT_PATH,"output",f"{self.keyword}.csv")),self.df]).to_csv(os.path.join(PROJECT_PATH,"output",f"{self.keyword}.csv"),index=False)
+        else:
+            self.df.to_csv(os.path.join(PROJECT_PATH,"output",f"{self.keyword}.csv"),index=False)
+        self.logger_inst.info(f'Saved Page {ind_page +1}')
+
+    def process(self):
+        #navigating
+        try:
+            self.driver.find_element(By.XPATH,self.next_button_xpath).click()
+            self.page_index+=1
+        except WebDriverException:
+            logger_inst.error('Error Clicking NEXT')
+            return None
+
+        time.sleep(10)
+
+        logger_inst.info(f"Page {self.page_index + 1} out of NOT KNOWN (Business Mode)")
+        logger_inst.info(f'Navigated to Page:{self.page_index+1}')
+
+        self.df = pd.DataFrame(columns=['Name', 'Page', 'Contacts', 'Potential_Response', "Url"])
+
+        #process each place
+        self.process_Places(self.page_index)
+
+        # save to csv
+        self.save_page_to_csv(self.page_index)
+class PlaceProcess():
+    def __init__(self,driver,logger_inst, keyword_, paginations):
+        self.paginations = paginations
+        self.driver = driver
+        self.logger_inst = logger_inst
+        self.df = pd.DataFrame(columns=['Name', 'Page', 'Contacts', 'Potential_Response', "Url"])
+        self.keyword = keyword_
+    def process_Places(self, ind_page):
+        place_list_info = get_xpath_list(self.driver.page_source)
+        logger_inst.info(f"Total {len(place_list_info)} Places in Page {ind_page}")
+        try:
+            for place in place_list_info:
+                place_processor = ProcessPage(place, ind_page,self.logger_inst)
+                place_data = place_processor.process(self.driver)
+                self.df.loc[len(self.df)] = [place_data.Name, place_data.Page, place_data.Contacts, place_data.Potential_Response,place_data.Url]
+
+        except Exception as e_inpage:
+            self.logger_inst.error(f"Couldn't process drive {ind_page+1} -- Error: {str(e_inpage)}")
+
+    def save_page_to_csv(self, ind_page):
+        #save to output
+        self.logger_inst.info(f'Saving Page {ind_page +1}')
+        if os.path.exists(os.path.join(PROJECT_PATH,"output",f"{self.keyword}.csv")):
+            pd.concat([pd.read_csv(os.path.join(PROJECT_PATH,"output",f"{self.keyword}.csv")),self.df]).to_csv(os.path.join(PROJECT_PATH,"output",f"{self.keyword}.csv"),index=False)
+        else:
+            self.df.to_csv(os.path.join(PROJECT_PATH,"output",f"{self.keyword}.csv"),index=False)
+        self.logger_inst.info(f'Saved Page {ind_page +1}')
+
+    def process(self):
+        #navigating
+        for ind_page, url in enumerate(self.paginations):
+            #navigating
+            self.driver.get(url+"&hl=en")
+            time.sleep(10)
+
+            logger_inst.info(f"Page {ind_page + 1} out of {len(self.paginations)}")
+            logger_inst.info(f'Navigated to Page:{ind_page+1}')
+
+            self.df = pd.DataFrame(columns=['Name', 'Page', 'Contacts', 'Potential_Response', "Url"])
+
+            #process each place
+            self.process_Places(ind_page)
+
+            # save to csv
+            self.save_page_to_csv(ind_page)
+
 if __name__ == '__main__':
-    get_reviews('london restaurants')
-    pass
+    get_reviews('locksmith in san diego')
