@@ -1,4 +1,5 @@
 import os
+from datetime import datetime
 
 from extractor import get_reviews
 from first_start import check_firstStart
@@ -22,9 +23,14 @@ def get_keywords():
                 keywrods.append(keyword_)
         return keywrods
 
+csv_name = ''
 if __name__ == '__main__':
+        current_time = datetime.now()
+        formatted_current_time = datetime.strftime(current_time, '%d_%m-%H_%M')
+        csv_name = f"{formatted_current_time}.csv"
+        print(csv_name)
         for keyword_ in get_keywords():
-            get_reviews(keyword_)
+            get_reviews(keyword_,csv_name)
 
 
 #TODO change first_start.txt

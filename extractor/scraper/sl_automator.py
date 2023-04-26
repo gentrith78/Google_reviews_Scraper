@@ -1,3 +1,4 @@
+import random
 import sys
 import time
 
@@ -22,13 +23,13 @@ PROJECT_PATH = os.path.dirname(os.path.dirname(PATH))
 
 print('started')
 
-def get_reviews(keyword):
+def get_reviews(keyword,csv_name):
     for i in range(15):
         try:
             #perform keyword search and click more places
             driver_instance = Create_Browser()
             driver = driver_instance.get_driver()
-            url = f'https://www.google.com/search?q={keyword}&hl=en'
+            url = f'https://www.google.com/search?tbs=lf:1,lf_ui:14&tbm=lcl&q={keyword.strip().replace(" ","+")}&rflfq=1&num=10&sa=X&ved=2ahUKEwjrnbTatcX-AhX{random.randint(1,5)}gP0HHY{random.choice(["Q","W","E","R","T","Y"])}fDW4QjGp{random.randint(1,9)}BAgWEAE&biw=1264'
             driver.get(url)
             time.sleep(5)
             search_processor = ProcessSearch(keyword,logger_inst)
@@ -61,7 +62,7 @@ def get_reviews(keyword):
         #TODO process bussines extraction mode
         pass
     else:
-        place_mode_processor = PlaceProcess(driver, logger_inst, keyword, paginations)
+        place_mode_processor = PlaceProcess(driver, logger_inst, csv_name, paginations)
         place_mode_processor.process()
 
     logger_inst.info('###################################')
@@ -70,13 +71,13 @@ def get_reviews(keyword):
     return True
 
 class BusinessProcess():
-    def __init__(self, next_button_xpath, driver,logger_inst, keyword_,):
+    def __init__(self, next_button_xpath, driver,logger_inst, csv_name,):
         self.next_button_xpath = next_button_xpath
         self.page_index = -1 #to match the 0 starting index
         self.driver = driver
         self.logger_inst = logger_inst
         self.df = pd.DataFrame(columns=['Name', 'Page', 'Contacts', 'Potential_Response', "Url"])
-        self.keyword = keyword_
+        self.csv_name = csv_name
     def process_Places(self, ind_page):
         place_list_info = get_xpath_list(self.driver.page_source)
         logger_inst.info(f"Total {len(place_list_info)} Places in Page {ind_page}")
@@ -91,10 +92,10 @@ class BusinessProcess():
     def save_page_to_csv(self, ind_page):
         #save to output
         self.logger_inst.info(f'Saving Page {ind_page +1}')
-        if os.path.exists(os.path.join(PROJECT_PATH,"output",f"{self.keyword}.csv")):
-            pd.concat([pd.read_csv(os.path.join(PROJECT_PATH,"output",f"{self.keyword}.csv")),self.df]).to_csv(os.path.join(PROJECT_PATH,"output",f"{self.keyword}.csv"),index=False)
+        if os.path.exists(os.path.join(PROJECT_PATH,"output",f"{self.csv_name}.csv")):
+            pd.concat([pd.read_csv(os.path.join(PROJECT_PATH,"output",f"{self.csv_name}.csv")),self.df]).to_csv(os.path.join(PROJECT_PATH,"output",f"{self.csv_name}.csv"),index=False)
         else:
-            self.df.to_csv(os.path.join(PROJECT_PATH,"output",f"{self.keyword}.csv"),index=False)
+            self.df.to_csv(os.path.join(PROJECT_PATH,"output",f"{self.csv_name}.csv"),index=False)
         self.logger_inst.info(f'Saved Page {ind_page +1}')
 
     def process(self):
@@ -119,12 +120,12 @@ class BusinessProcess():
         # save to csv
         self.save_page_to_csv(self.page_index)
 class PlaceProcess():
-    def __init__(self,driver,logger_inst, keyword_, paginations):
+    def __init__(self,driver,logger_inst, csv_name, paginations):
         self.paginations = paginations
         self.driver = driver
         self.logger_inst = logger_inst
-        self.df = pd.DataFrame(columns=['Name', 'Page', 'Contacts', 'Potential_Response', "Url"])
-        self.keyword = keyword_
+        self.df = pd.DataFrame(columns=['Business Name', 'main phone', 'email extracted', 'phone extracted', "Bad review", "Time stamp of the bad review ", "Response from the owner","Url"])
+        self.csv_name = csv_name
     def process_Places(self, ind_page):
         place_list_info = get_xpath_list(self.driver.page_source)
         logger_inst.info(f"Total {len(place_list_info)} Places in Page {ind_page}")
@@ -132,18 +133,18 @@ class PlaceProcess():
             for place in place_list_info:
                 place_processor = ProcessPage(place, ind_page,self.logger_inst)
                 place_data = place_processor.process(self.driver)
-                self.df.loc[len(self.df)] = [place_data.Name, place_data.Page, place_data.Contacts, place_data.Potential_Response,place_data.Url]
-
+                self.df.loc[len(self.df)] = [place_data.Name, place_data.Main_Phone, place_data.Email_Extracted, place_data.Phone_Extracted,place_data.Bad_Review,place_data.Timestamp,place_data.RFO,place_data.Url]
+                pass
         except Exception as e_inpage:
             self.logger_inst.error(f"Couldn't process drive {ind_page+1} -- Error: {str(e_inpage)}")
 
     def save_page_to_csv(self, ind_page):
         #save to output
         self.logger_inst.info(f'Saving Page {ind_page +1}')
-        if os.path.exists(os.path.join(PROJECT_PATH,"output",f"{self.keyword}.csv")):
-            pd.concat([pd.read_csv(os.path.join(PROJECT_PATH,"output",f"{self.keyword}.csv")),self.df]).to_csv(os.path.join(PROJECT_PATH,"output",f"{self.keyword}.csv"),index=False)
+        if os.path.exists(os.path.join(PROJECT_PATH,"output",f"{self.csv_name}.csv")):
+            pd.concat([pd.read_csv(os.path.join(PROJECT_PATH,"output",f"{self.csv_name}.csv")),self.df]).to_csv(os.path.join(PROJECT_PATH,"output",f"{self.csv_name}.csv"),index=False)
         else:
-            self.df.to_csv(os.path.join(PROJECT_PATH,"output",f"{self.keyword}.csv"),index=False)
+            self.df.to_csv(os.path.join(PROJECT_PATH,"output",f"{self.csv_name}.csv"),index=False)
         self.logger_inst.info(f'Saved Page {ind_page +1}')
 
     def process(self):
@@ -156,7 +157,7 @@ class PlaceProcess():
             logger_inst.info(f"Page {ind_page + 1} out of {len(self.paginations)}")
             logger_inst.info(f'Navigated to Page:{ind_page+1}')
 
-            self.df = pd.DataFrame(columns=['Name', 'Page', 'Contacts', 'Potential_Response', "Url"])
+            self.df = pd.DataFrame(columns=['Business Name', 'main phone', 'email extracted', 'phone extracted', "Bad review", "Time stamp of the bad review ", "Response from the owner","Url"])
 
             #process each place
             self.process_Places(ind_page)
@@ -164,5 +165,3 @@ class PlaceProcess():
             # save to csv
             self.save_page_to_csv(ind_page)
 
-if __name__ == '__main__':
-    get_reviews('locksmith in san diego')

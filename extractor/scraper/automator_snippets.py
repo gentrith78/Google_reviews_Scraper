@@ -97,16 +97,13 @@ class ProcessSearch():
 
     def process(self, driver):
 
-        # if  self.process_search(driver) == None:
-        button_clickin_process = self.morePlacesOrBusiness_button_clicking(driver)
-        if button_clickin_process == None:
-            paginations = self.get_pagination_urls(driver)
-            if paginations != None:
-                paginations.insert(0, driver.current_url)
-                self.logger_.info(f"{len(paginations)} Pages to paginate")
-                return paginations
-        elif button_clickin_process[0] == 'business':
-            return button_clickin_process
+
+        paginations = self.get_pagination_urls(driver)
+        if paginations != None:
+            paginations.insert(0, driver.current_url)
+            self.logger_.info(f"{len(paginations)} Pages to paginate")
+            return paginations
+
         raise Exception
 
 
@@ -156,10 +153,20 @@ class ProcessPage():
 
     def perform_reviews_extraction(self,driver):
         reviews_data = get_all_reviews(self.logger,driver)
+
         if reviews_data != None:
-            self.logger.info(f"{reviews_data['contacts']}")
-            place_data = Place(Name=self.place['place_div_name'], Page=str(self.ind_page + 1), Contacts=reviews_data['contacts'],
-                               Potential_Response=reviews_data['response'], Url=driver.current_url)
+            self.logger.info(f"{reviews_data['email extracted']}")
+            self.logger.info(f"{reviews_data['phone extracted']}")
+
+            place_data  = Place()
+            place_data.Name = self.place['place_div_name']
+            place_data.Main_Phone = reviews_data['main_phone']
+            place_data.Email_Extracted = reviews_data['email extracted']
+            place_data.Phone_Extracted = reviews_data['phone extracted']
+            place_data.Bad_Review = reviews_data['bad review']
+            place_data.Timestamp = reviews_data['timestamp']
+            place_data.RFO = reviews_data['rfo']
+            place_data.Url = driver.current_url
             return place_data
         return None
     def process(self,driver):
@@ -167,9 +174,7 @@ class ProcessPage():
         self.logger.info(f"Processing: {self.place['place_div_name']}")
 
         #not processed place
-        place_data = Place(Name=self.place['place_div_name'], Page=str(self.ind_page + 1),
-                           Contacts='None', Potential_Response='None',
-                           Url=driver.current_url)
+        place_data = Place(Name=self.place['place_div_name'], Url=driver.current_url)
 
         check_if__placeDiv_is_Clickable = self.perform_name_click(driver)
         if check_if__placeDiv_is_Clickable !=  None: #if this isn't None means that playwright couldn't perform click GOOD TO GO

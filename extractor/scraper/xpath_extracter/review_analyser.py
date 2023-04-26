@@ -33,11 +33,11 @@ def find_contact_info(text):
     non_us_phonenumber_patterns = r'^(\+0?1\s)?\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}$'
     non_standard_phonenumbers_pattern = r'^(\+\d{1,2}\s?)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$'
     # Find all matches in the text
-    matches = []
-
+    phone_numbers = []
+    emails = []
     try:
         email_regex = re.search(email_url_re_with_hhtps, text, re.MULTILINE).group()
-        matches.append(email_regex)
+        emails.append(email_regex)
     except:
         pass
 
@@ -45,43 +45,50 @@ def find_contact_info(text):
         for email in re.compile(email_url_re_without_https).finditer(text):
             email = check_email_match(email.group())
             if email:
-                matches.append(email)
+                emails.append(email)
             else:
                 pass
     except:
         pass
     try:
         phone_regex1 = re.search(us_phonenumbers_pattern, text).group()
-        matches.append(phone_regex1)
+        phone_numbers.append(phone_regex1)
     except:
         pass
     try:
         phone_regex2 = re.search(non_us_phonenumber_patterns, text).group()
-        matches.append(phone_regex2)
+        phone_numbers.append(phone_regex2)
     except:
         pass
     try:
         phone_regex3 = re.search(non_standard_phonenumbers_pattern, text).group()
-        matches.append(phone_regex3)
+        phone_numbers.append(phone_regex3)
     except:
         pass
     try:
         match_algo_phone = find_by_text_algo(text)
         if match_algo_phone != None:
-            matches.append(match_algo_phone)
+            phone_numbers.append(match_algo_phone)
     except:
         pass
-    # Remove duplicates
-    matches = list(set(matches))
 
-    final_contacts = []
-    for contact in matches:
+    # Remove duplicates
+    emails = list(set(emails))
+    phone_numbers = list(set(phone_numbers))
+    final_emails = []
+    final_phones = []
+    for contact in phone_numbers:
         if contact == "" or str(contact).isspace() or len(contact) <= 7:
             continue
-        final_contacts.append(contact)
+        final_phones.append(contact)
+    for contact in emails:
+        if contact == "" or str(contact).isspace() or len(contact) <= 7:
+            continue
+        final_emails.append(contact)
 
 
-    return final_contacts
+    return {'phones':"||".join(final_phones),"emails":'||'.join(final_emails)}
+
 
 if __name__ == '__main__':
     textemail = """

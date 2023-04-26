@@ -15,6 +15,7 @@ class AttrHelpers(): #so we are gonna use this data to find the elements through
     list_div_attr = {'class':'rlfl__tls rl_tls'} #class="rlfl__tls rl_tls"
     place_div_attr = {'jscontroller':'AtSb'}
     name_div_of_place = {'class':'rllt__details'}
+    phone__a_tag_attr = {'jscontroller':'LWZElb'}
 
     review_button = {'jsname':'AznF2e','data-index':'1'}
     lowest_review_button = {'data-sort-id':'ratingLow'}
@@ -30,11 +31,14 @@ class AttrHelpers(): #so we are gonna use this data to find the elements through
 
 @dataclass
 class Place():
-    Name:str
-    Page:str
-    Contacts:str
-    Potential_Response:str
-    Url:str
+    Name:str = ''
+    Main_Phone:str = ''
+    Email_Extracted:str = ''
+    Phone_Extracted:str = ''
+    Bad_Review:str = ''
+    Timestamp:str = ''
+    RFO:str = '' #response from owner
+    Url:str = ''
 
 @dataclass
 class Places():
