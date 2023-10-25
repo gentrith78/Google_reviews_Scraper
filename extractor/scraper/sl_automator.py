@@ -29,7 +29,9 @@ def get_reviews(keyword,csv_name):
             #perform keyword search and click more places
             driver_instance = Create_Browser()
             driver = driver_instance.get_driver()
-            url = f'https://www.google.com/search?tbs=lf:1,lf_ui:14&tbm=lcl&q={keyword.strip().replace(" ","+")}&rflfq=1&num=10&sa=X&ved=2ahUKEwjrnbTatcX-AhX{random.randint(1,5)}gP0HHY{random.choice(["Q","W","E","R","T","Y"])}fDW4QjGp{random.randint(1,9)}BAgWEAE&biw=1264'
+            url = f'https://www.google.com/search?tbs=lf:1,lf_ui:14&tbm=lcl&q={keyword.strip().replace(" ","+")}' \
+                  f'&rflfq=1&num=10&sa=X&ved=2ahUKEwjrnbTatcX-AhX{random.randint(1,5)}gP0HHY' \
+                  f'{random.choice(["Q","W","E","R","T","Y"])}fDW4QjGp{random.randint(1,9)}BAgWEAE&biw=1264'
             driver.get(url)
             time.sleep(5)
             search_processor = ProcessSearch(keyword,logger_inst)
@@ -121,8 +123,7 @@ class BusinessProcess():
         self.save_page_to_csv(self.page_index)
 class PlaceProcess():
     def __init__(self,driver,logger_inst, csv_name, paginations):
-        self.paginations = paginations
-        self.driver = driver
+
         self.logger_inst = logger_inst
         self.df = pd.DataFrame(columns=['Business Name', 'main phone', 'email extracted', 'phone extracted', "Bad review", "Time stamp of the bad review ", "Response from the owner","Url"])
         self.csv_name = csv_name

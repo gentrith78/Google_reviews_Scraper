@@ -13,3 +13,6 @@ Query this url:
 https://chromedriver.storage.googleapis.com/index.html?path=<the version>
 
 TO: https://chromedriver.storage.googleapis.com/index.html?path=110.0.5481
+
+
+If that is not possible then look the version of the chrome and find it in this link: https://googlechromelabs.github.io/chrome-for-testing/known-good-versions-with-downloads.json

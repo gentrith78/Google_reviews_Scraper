@@ -27,9 +27,13 @@ class Logger:
 
 
     def get_logger(self, name: str = ''):
+        print(name,'###')
         return logging.getLogger(name)
 
 logger_obj = Logger(f'{PATH}/logs')
 
 logger_inst = logger_obj.get_logger()
+if __name__ == '__main__':
+    logger_obj = Logger(f'{PATH}/logs')
 
+    logger_inst = logger_obj.get_logger()

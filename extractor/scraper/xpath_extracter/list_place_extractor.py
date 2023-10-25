@@ -6,11 +6,10 @@ except:
     from extractor.scraper.xpath_extracter.helper import AttrHelpers
     from xpath_finder import xpath_soup
 
-
 # Attribute Data for the div elements that contains all places
 attr_helpers = AttrHelpers()
 
-def get_xpath_list(html_data):
+def get_xpath_list(html_data, contactMode=False):
     output_data = []
 
     soup = BeautifulSoup(html_data, features='html.parser')
@@ -31,12 +30,27 @@ def get_xpath_list(html_data):
             # handle the error
             continue
 
-        place_data['place_div_id'] = str(attrs['id'])
-        place_data['place_div_name_div'] = str(xpath_soup(place.find('div', attr_helpers.name_div_of_place)))
-        place_data['place_div_name'] = place.find('div', attr_helpers.name_div_of_place).find('span').text
+        if contactMode:
+            place_data = {
+                'place_div_xpath': '',
+                'place_div_id': '',
+                'place_div_name_div': '',
+                'urlofWebsite': '',
+            }
+            #get site
+            website = ''
+            for el in place.find_all('a'):
+                if 'website' in el.text.lower():
+                    place_data['urlofWebsite'] = el.get('href','')
+                    website = el.get('href', '')
+            name = place.find('div', attr_helpers.name_div_of_place).find('span').text
+            output_data.append((name, website))
+        else:
+            place_data['place_div_id'] = str(attrs['id'])
+            place_data['place_div_name_div'] = str(xpath_soup(place.find('div', attr_helpers.name_div_of_place)))
+            place_data['place_div_name'] = place.find('div', attr_helpers.name_div_of_place).find('span').text
 
-        output_data.append(place_data)
-
+            output_data.append(place_data)
     return output_data
 
 if __name__ == '__main__':

@@ -1,12 +1,7 @@
 import os
 from datetime import datetime
 
-from extractor import get_reviews
-from first_start import check_firstStart
-
-#Dependencies will be installed while running for the first time
-check_firstStart()
-
+from extractor import get_reviews, get_contacts
 
 PATH = os.path.abspath(os.path.dirname(__file__))
 
@@ -30,6 +25,7 @@ if __name__ == '__main__':
         csv_name = f"{formatted_current_time}.csv"
         print(csv_name)
         for keyword_ in get_keywords():
+            # get_contacts(keyword_,csv_name)
             get_reviews(keyword_,csv_name)
 
 
