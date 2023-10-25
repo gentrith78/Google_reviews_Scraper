@@ -1,7 +1,7 @@
 import os
 from datetime import datetime
 
-from extractor import get_reviews, get_contacts
+from extractor import get_contacts
 
 PATH = os.path.abspath(os.path.dirname(__file__))
 

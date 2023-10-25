@@ -46,8 +46,9 @@ def get_contacts(keyword, csv_name):
         except RuntimeError:
             logger_inst.error(f'Failed to find "More Places" button')
             return None
-        except WebDriverException:
+        except WebDriverException as de:
             logger_inst.error('Error with selenium')
+            logger_inst.error(str(de))
         except Exception as e:
             try:
                 driver.close()
@@ -55,7 +56,6 @@ def get_contacts(keyword, csv_name):
             except UnboundLocalError:
                 # a new browser iscreated but wiull remain unused, delete it
                 driver_instance.delete_profile()
-                pass
             logger_inst.error(f'Failed search process:{str(e)}')
             logger_inst.error('Creating new browser')
             pass

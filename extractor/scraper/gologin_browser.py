@@ -1,10 +1,12 @@
 import os
 import random
 import zipfile
+from pathlib import Path
 
 from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
 from dotenv import load_dotenv
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.chrome.service import Service
 
 try:
     from .gologin import GoLogin
@@ -95,11 +97,13 @@ class Create_Browser():
     def get_driver(self):
         debugger_address = self.gl.start()
         print(debugger_address)
+        driver_path = Path(self.PATH).joinpath('chromedriver.exe')
+        service = Service(executable_path=str(driver_path))
         chrome_options = Options()
         chrome_options.add_experimental_option("debuggerAddress", debugger_address)
         if self.proxy:
             chrome_options.add_extension(self.get_chromedriver())
-        driver = webdriver.Chrome(executable_path=os.path.join(self.PATH,'chromedriver.exe'), options=chrome_options)
+        driver = webdriver.Chrome(service=service, options=chrome_options)
         return driver
     def delete_profile(self):
         try:
